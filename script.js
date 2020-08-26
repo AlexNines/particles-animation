@@ -11,7 +11,8 @@
             particleRadius: 3,
             particleCount: 60,
             particleMaxVelocity: 0.5,
-            lineLegth: 150
+            lineLegth: 150,
+            particleLife: 6
         }
     document.querySelector('body').appendChild(canvas)
 
@@ -26,7 +27,8 @@
             this.y = Math.random() * h
             this.velocityX = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity
             this.velocityY = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity
-
+            this.life = Math.random()*properties.particleLife*60
+            
         }
         position() {
             this.x + this.velocityX > w && this.velocityX > 0 || this.x + this.velocityX < 0 && this.velocityX < 0 ? this.velocityX *= -1 : this.velocityX
@@ -42,6 +44,16 @@
             ctx.closePath()
             ctx.fillStyle = properties.particleColor
             ctx.fill()
+        }
+        reCalculateLife(){
+            if(this.life <1){
+                this.x = Math.random() * w
+            this.y = Math.random() * h
+            this.velocityX = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity
+            this.velocityY = Math.random() * (properties.particleMaxVelocity * 2) - properties.particleMaxVelocity
+            this.life = Math.random()*properties.particleLife*60 
+            }
+            this.life--
         }
     }
 
@@ -78,8 +90,10 @@
 
     function reDrawParticles() {
         for (let i in particles) {
+            particles[i].reCalculateLife()
             particles[i].position()
             particles[i].reDraw()
+
         }
     }
 
